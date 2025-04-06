@@ -5,6 +5,7 @@ import whatsapp from "@/public/whatsapp.png"
 import instagram from "@/public/instagram.png"
 
 function Footer() {
+
   return (
     <footer className="w-full flex  lg:border-t border-gray-200 lg:flex-row lg:justify-between p-3  flex-col items-center gap-3">
         <div className='flex items-center flex-col w-full'>
