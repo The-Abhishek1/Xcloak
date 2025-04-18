@@ -14,6 +14,7 @@
     "dotenv": "^16.5.0",
     "lucide-react": "^0.487.0",
     "motion": "^12.6.3",
+    "newsapi": "^2.4.1",
     "next": "15.2.4",
     "next-video": "^2.2.0",
     "react": "^19.0.0",
