@@ -1,0 +1,56 @@
+"use client"
+import React, { useState } from 'react'
+
+function Input() {
+
+  const [target,setTarget] = useState("")
+  const [show, setShow] = useState(false)
+
+  const scanTarget = () => {
+    console.log(target)
+  }
+
+  if(show){
+    return(
+      <div className='flex text-[.9rem] pb-10 flex-col text-white bg-black items-center gap-5'>
+      <h1 className='font-bold text-[1.5rem]'>Choose API for Scanning...</h1>     
+      <div className="flex flex-col space-y-3">
+        <button className="bg-gray-900 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-gray-800">
+          🔍 Shodan Scan
+        </button>
+        <button className="bg-blue-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-blue-700">
+          🌐 Web-Check Analysis
+        </button>
+        <button className="bg-green-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-green-700">
+          🛡️ ZAP Proxy Scan
+        </button>
+      </div>
+      <button onClick={()=>{
+        setShow(false)
+        setTarget("")
+      }} className="mt-5 w-[14rem] sm:w-[20rem] py-2 bg-red-600 cursor-pointer hover:bg-red-700 block mx-auto">
+        Cancel
+      </button>
+  </div>
+    )
+  }
+  else{
+  return (
+    <div className='px-20 pb-10 text-gray-50 bg-black flex flex-col items-center gap-5'>
+        <input value={target} onChange={(e)=>{
+          setTarget(e.target.value)
+        }} className=' border-[2.6px] p-2 w-[14rem] sm:w-[20rem] text-center text-[.8rem] outline-none' type='text' placeholder='Enter the URL to Scan'/>
+        <button onClick={()=>{
+          if(target == ""){
+            alert("Please specify the target to scan!!!")
+          }
+          else{
+            setShow(true)
+          }
+        }} className='bg-[#478c0a] w-[14rem] sm:w-[20rem] py-2 text-[.9rem] cursor-pointer'>Start Testing URL</button>
+    </div>
+  )
+}
+}
+
+export default Input
