@@ -1,26 +1,21 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import NewsItem from "./NewsItem";
-import NewsAPI from "newsapi";
 
 export default function NewsList() {
   const [articles, SetArticles] = useState([]);
   const [target, setTarget] = useState("cybersecurity");
-  const newsapi = new NewsAPI('7c25db33939141c7a279f8e6d66177a6');
 
-const getArticles = async (target) => {   
-  await newsapi.v2.everything({
-    q: target,
-    category: 'technology',
-    sources: 'bbc-news,the-verge',
-    domains: 'bbc.co.uk, techcrunch.com',
-    language: 'en',
-    sortBy: 'relevancy',
-  }).then(response => {
-    SetArticles(response.articles)
-  });
-};
+  const getArticles = async (target) => {
+  await fetch(`http://localhost:5000/news?q=${target}`)
+  .then(res => res.json())
+  .then((data) =>{
+    SetArticles(data)
+    console.log(data)
+  })
+  .catch(err => console.error(err));
+  }
+
   useEffect(() => {
     getArticles();
   }, []);
