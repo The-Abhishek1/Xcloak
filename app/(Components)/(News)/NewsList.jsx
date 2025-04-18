@@ -8,10 +8,14 @@ export default function NewsList() {
   const [target, setTarget] = useState("cybersecurity");
 
 const getArticles = async (target) => {
-    const response = await axios.get(
-      `https://newsapi.org/v2/everything?q=${target}&apiKey=e2dcb3fca6e24269aa4dd18e332bb9d7`
-    );
-    SetArticles(response.data.articles);
+    await axios.get(
+      `https://newsapi.org/v2/everything?q=${target}&apiKey=7c25db33939141c7a279f8e6d66177a6`
+    ).then((response)=>{
+      SetArticles(response.data.articles);
+    }).catch((e)=>{
+      console(e)
+    })
+    
 };
   useEffect(() => {
     getArticles();
