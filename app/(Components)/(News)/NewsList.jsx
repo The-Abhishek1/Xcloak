@@ -1,22 +1,26 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import NewsItem from "./NewsItem";
+import Chill from "./Chill";
+
 
 export default function NewsList() {
   const [articles, SetArticles] = useState([]);
   const [target, setTarget] = useState("cybersecurity");
+  const [loader, setLoader] = useState(true);
 
   const getArticles = async (target) => {
   await fetch(`http://localhost:1210/news?q=${target}`)
   .then(res => res.json())
   .then((data) =>{
     SetArticles(data)
+    setLoader(false)
   })
   .catch(err => console.error(err));
   }
 
   useEffect(() => {
-    getArticles();
+    // getArticles();
   }, []);
   return (
     <div className="flex flex-col items-center">
@@ -29,6 +33,9 @@ export default function NewsList() {
           setTarget("")
         }} className="bg-gray-900 text-white cursor-pointer py-2 px-7 rounded hover:bg-gray-800">Search</button>
       </div>
+
+      {
+        loader ? <Chill/> :
     <div className="md:grid grid-cols-2">
       {articles.map((article,id) => {
         return (
@@ -42,7 +49,7 @@ export default function NewsList() {
           </div>
         );
       })}
-    </div>
+    </div>  }
     </div>
   );
 }
