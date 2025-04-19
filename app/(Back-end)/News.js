@@ -17,7 +17,6 @@ app.get('/news', async (req, res) => {
       language: 'en',
       sortBy: 'relevancy',
     });
-
     res.send(response.articles)
   } catch (error) {
     console.error(error);
