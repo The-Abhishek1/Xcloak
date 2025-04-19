@@ -1,34 +1,41 @@
 "use client"
-import React, { useState } from 'react'
-
+import React, { useState,createContext } from 'react'
+import Link from 'next/link'
 function Input() {
 
   const [target,setTarget] = useState("")
   const [show, setShow] = useState(false)
-
-  const scanTarget = () => {
-    console.log(target)
-  }
 
   if(show){
     return(
       <div className='flex text-[.9rem] pb-10 flex-col text-white bg-black items-center gap-5'>
       <h1 className='font-bold text-[1.5rem]'>Choose API for Scanning...</h1>     
       <div className="flex flex-col space-y-3">
-        <button className="bg-gray-900 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-gray-800">
+        <button onClick={() => {
+          alert("we are currently working on this feature please use ZAP Proxy")
+        }} className="bg-gray-900 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-gray-800">
           🔍 Shodan Scan
         </button>
-        <button className="bg-blue-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-blue-700">
+        <button onClick={() => {
+          alert("we are currently working on this feature please use ZAP Proxy")
+        }} className="bg-blue-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-blue-700">
           🌐 Web-Check Analysis
         </button>
-        <button className="bg-green-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-green-700">
-          🛡️ ZAP Proxy Scan
-        </button>
+        <Link  href={{
+            pathname: '/scan',
+            query:{
+            target: target
+            }
+          }} >
+          <button className="bg-green-600 w-[14rem] sm:w-[20rem] cursor-pointer py-2 rounded hover:bg-green-700">
+            🛡️ ZAP Proxy Scan
+          </button>
+        </Link>
       </div>
       <button onClick={()=>{
         setShow(false)
         setTarget("")
-      }} className="mt-5 w-[14rem] sm:w-[20rem] py-2 bg-red-600 cursor-pointer hover:bg-red-700 block mx-auto">
+      }} className = "mt-5 w-[14rem] sm:w-[20rem] py-2 bg-red-600 cursor-pointer hover:bg-red-700 block mx-auto">
         Cancel
       </button>
   </div>

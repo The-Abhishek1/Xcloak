@@ -1,12 +1,38 @@
+import NewsAPI from 'newsapi';
+import cors from "cors"
+import express from "express"
+import path from "path"
 import ZAPClient from "zaproxy"
 import fs from "fs"
-import express from "express"
-import cors from "cors"
 
-const app = express()
-app.use(cors())
-const PORT = 1210;
+const app = express();
+const newsapi = new NewsAPI('7c25db33939141c7a279f8e6d66177a6');
 
+app.use(cors()); // allow cross-origin requests to your server
+
+//News API
+app.get('/news', async (req, res) => {
+  try {
+    const { q } = req.query;
+    const response = await newsapi.v2.everything({
+      q: q,
+      sources: 'bbc-news,the-verge',
+      domains: 'bbc.co.uk,techcrunch.com',
+      language: 'en',
+      sortBy: 'relevancy',
+    });
+    res.send(response.articles)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching news' });
+  }
+});
+
+//Report API
+app.get("/report", (req, res) => {  
+  const {fileName} = req.query 
+res.sendFile(fileName);
+});
 
 const API = 'jhlc5el9omeee25t4no3vs0j1j'
 const zapOptions = {
@@ -17,10 +43,10 @@ const zapOptions = {
   }
 };
 const zaproxy = new ZAPClient(zapOptions);
-const target = 'https://chatgpt.com/';
 
-//API
+//Scanning API
 app.get('/scan', async(req, res) => {
+  const {target} = req.query
   console.log("\n" + "Scanning, Have a Coffee.☕😉")
     try {
       // 1.Access the target URL via ZAP before scanning
@@ -59,13 +85,13 @@ app.get('/scan', async(req, res) => {
       // console.log( + 'Active scan finished.' + "\n");
       
       // 4. Get alerts
-      console.log('Alerts scan started.');
-      const alerts = await zaproxy.core.alerts({url:target});
-      console.log(`Found ${alerts.alerts.length} vulnerabilities:`);
-      console.log('Alerts scan finished.');
+      // console.log('Alerts scan started.');
+      // const alerts = await zaproxy.core.alerts({url:target});
+      // console.log(`Found ${alerts.alerts.length} vulnerabilities:`);
+      // console.log('Alerts scan finished.');
       
       //Generate report
-      console.log("\n" + "Genearting report");
+      console.log("\n" + "Genearting a report");
       const report = await zaproxy.reports.generate({
         apikey:API,
         title: target,
@@ -76,39 +102,16 @@ app.get('/scan', async(req, res) => {
       // fs.writeFileSync('zap-report.html', report);
       console.log('HTML report saved at: ' + report.generate);
       //Sending Response
-      res.send(report.generate)
+      res.json({ message: "Scan complete", reportPath:report.generate })
     
     } catch (err) {
       console.log('ZAP error:', err);
-      res.send(err)
+      res.json(err)
     }
 })
 
 
-
-
-app.listen(PORT,() => {
-  console.log("Server listening on Port:"+ PORT)
-})
-
-
-
-
-
-
-
-
-
-
-async function saveHtmlReport() {
-  const report = await zaproxy.reports.generate({
-    apikey:API,
-    title: 'Xcloak Report',
-    template: 'traditional-html',
-    reportFileName: 'report.html',
-    displayReport: true,
-  });
-  // fs.writeFileSync('zap-report.html', report);
-  console.log('HTML report saved at: ' + report.generate);
-  return report.generate
-}
+//Listening
+app.listen(1210, () => {
+  console.log('Server running on 1210');
+});

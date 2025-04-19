@@ -7,11 +7,10 @@ export default function NewsList() {
   const [target, setTarget] = useState("cybersecurity");
 
   const getArticles = async (target) => {
-  await fetch(`http://localhost:5000/news?q=${target}`)
+  await fetch(`http://localhost:1210/news?q=${target}`)
   .then(res => res.json())
   .then((data) =>{
     SetArticles(data)
-    console.log(data)
   })
   .catch(err => console.error(err));
   }
