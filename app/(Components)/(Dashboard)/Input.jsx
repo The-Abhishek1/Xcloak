@@ -5,6 +5,13 @@ function Input() {
 
   const [target,setTarget] = useState("")
   const [show, setShow] = useState(false)
+  const [error, setError] = useState(false);
+
+  setTimeout(() =>{
+    if(error){
+      setError(false)
+    }
+  },2000)
 
   if(show){
     return(
@@ -47,14 +54,21 @@ function Input() {
         <input value={target} onChange={(e)=>{
           setTarget(e.target.value)
         }} className=' border-[2.6px] p-2 w-[14rem] sm:w-[20rem] text-center text-[.8rem] outline-none' type='text' placeholder='Enter the URL to Scan'/>
+        {
+          error ? 
+          <p className='text-[.8rem] text-red-700'>Please enter the valid URL.</p>
+          :null
+        }
         <button onClick={()=>{
           if (!/^https?:\/\/.*\.(com|in|org|edu)/.test(target)) {
-            alert("Invalid URL. Please enter a valid URL.");
+            setError(true)
+            setTarget("")
           }
           else{
             setShow(true)
           }
         }} className='bg-[#478c0a] w-[14rem] sm:w-[20rem] py-2 text-[.9rem] cursor-pointer'>Start Testing URL</button>
+        
     </div>
   )
 }
