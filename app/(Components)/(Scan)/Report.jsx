@@ -1,5 +1,4 @@
 'use client'
-import { Suspense } from 'react';
 import React ,{useEffect, useState} from 'react';
 import { useSearchParams  } from 'next/navigation'
 import Image from 'next/image';
@@ -35,7 +34,6 @@ function Report() {
   }
   else{
     return(
-    <Suspense fallback={<div>Loading scan...</div>}>
       <div className="flex flex-col p-10 items-center justify-center bg-black text-white">
         <Image src={Chill} height={400} alt="Chilling"/>
       <div className="text-center">
@@ -44,7 +42,6 @@ function Report() {
         <p className="text-sm text-gray-300 mt-2">Please wait while we analyze the target URL.</p>
       </div>
       </div>
-    </Suspense>
     )
   }
 }

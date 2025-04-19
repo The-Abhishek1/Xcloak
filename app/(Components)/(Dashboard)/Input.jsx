@@ -48,8 +48,8 @@ function Input() {
           setTarget(e.target.value)
         }} className=' border-[2.6px] p-2 w-[14rem] sm:w-[20rem] text-center text-[.8rem] outline-none' type='text' placeholder='Enter the URL to Scan'/>
         <button onClick={()=>{
-          if(target == ""){
-            alert("Please specify the target to scan!!!")
+          if (!/^https?:\/\/.*\.(com|in|org|edu)/.test(target)) {
+            alert("Invalid URL. Please enter a valid URL.");
           }
           else{
             setShow(true)
