@@ -1,4 +1,5 @@
 import React from 'react'
+import { Suspense } from 'react';
 import Header from '../(Components)/(Common)/Header'
 import Footer from '../(Components)/(Common)/Footer'
 import Report from '../(Components)/(Scan)/Report'
@@ -7,7 +8,9 @@ function page() {
   return (
     <div>
         <Header/>
-        <Report/>
+        <Suspense fallback={<div className="p-10 text-center">Loading scan component...</div>}>
+          <Report/>
+        </Suspense>
         <Footer/>
     </div>
   )
