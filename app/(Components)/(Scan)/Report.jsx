@@ -1,4 +1,5 @@
 'use client'
+import { Suspense } from 'react';
 import React ,{useEffect, useState} from 'react';
 import { useSearchParams  } from 'next/navigation'
 import Image from 'next/image';
