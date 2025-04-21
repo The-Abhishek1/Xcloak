@@ -2,7 +2,7 @@ import React from 'react'
 import { Suspense } from 'react';
 import Header from '../(Components)/(Common)/Header'
 import Footer from '../(Components)/(Common)/Footer'
-import Report from '../(Components)/(Scan)/Report'
+import Report from '../(Components)/(ZAPScan)/Report'
 
 function page() {
   return (

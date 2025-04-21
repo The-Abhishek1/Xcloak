@@ -11,7 +11,7 @@ function Button() {
     <>
       <div className='flex flex-row items-center gap-3'>
         <Link href={"https://forms.gle/5DRTf3K1chAjppDWA"}>
-        <button type="button" className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br rounded-lg text-sm px-5 py-1.5 cursor-pointer text-center">Join Us</button>
+        <button type="button" className="text-white bg-gradient-to-r text-[.8rem] from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br rounded-lg text-sm px-3 py-1 cursor-pointer text-center">Join Us</button>
         </Link>
             <div onClick={() => {
           setMenu(!showmenu)

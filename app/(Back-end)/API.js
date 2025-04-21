@@ -3,14 +3,56 @@ import cors from "cors"
 import express from "express"
 import path from "path"
 import ZAPClient from "zaproxy"
-import fs from "fs"
+import {promises as dns} from "dns"
 
-const app = express();
-const newsapi = new NewsAPI('7c25db33939141c7a279f8e6d66177a6');
-
+const app = express()
 app.use(cors()); // allow cross-origin requests to your server
 
+//Shodan API
+const baseUrl = 'https://api.shodan.io';
+const ShodanAPI = "TwEnjjuCVT8SQVtxKEXQPisraqYQPJm4"
+
+app.get('/shodanscan' , async (req, res) => {
+   // Remove protocol (http, https) and any trailing slash
+   let target = req.query.target.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '');
+ 
+   if (!target) {
+     return res.status(400).json({ error: 'Missing target' });
+   }
+   try {
+     // If domain, resolve to IP
+     if (!/^\d+\.\d+\.\d+\.\d+$/.test(target)) {
+       const resolved = await dns.lookup(target);
+       target = resolved.address;
+     }
+
+    const url = `${baseUrl}/shodan/query?key=${ShodanAPI}&query=${target}`;
+    //Fetching Data
+    const response = await fetch(url);
+    const data = await response.json();
+    const formatted = {
+      totalResults: data.total,
+      results: data.matches.map(match => ({
+        title: match.title || 'N/A',
+        description: match.description || 'N/A',
+        query: match.query || 'N/A',
+        tags: match.tags.filter(tag => tag !== '') || ['None'],
+        votes: match.votes || 0,
+        timestamp: new Date(match.timestamp).toLocaleString(),
+      }))
+    };
+
+    res.json(formatted);
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+})
+
+
 //News API
+const newsapi = new NewsAPI('7c25db33939141c7a279f8e6d66177a6');
 app.get('/news', async (req, res) => {
   try {
     const { q } = req.query;
@@ -28,12 +70,8 @@ app.get('/news', async (req, res) => {
   }
 });
 
-//Report API
-app.get("/report", (req, res) => {  
-  const {fileName} = req.query 
-res.sendFile(fileName);
-});
 
+//ZAP PROXY
 const API = 'jhlc5el9omeee25t4no3vs0j1j'
 const zapOptions = {
   apiKey: API, // Leave empty if disabled
@@ -44,8 +82,14 @@ const zapOptions = {
 };
 const zaproxy = new ZAPClient(zapOptions);
 
+//Report API
+app.get("/report", (req, res) => {  
+  const {fileName} = req.query 
+  res.sendFile(fileName);
+});
+
 //Scanning API
-app.get('/scan', async(req, res) => {
+app.get('/zapscan', async(req, res) => {
   const {target} = req.query
   console.log("\n" + "Scanning, Have a Coffee.☕😉")
     try {

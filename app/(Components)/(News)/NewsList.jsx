@@ -4,6 +4,7 @@ import NewsItem from "./NewsItem";
 import Chill from "./Chill";
 
 
+
 export default function NewsList() {
   const [articles, SetArticles] = useState([]);
   const [target, setTarget] = useState("cybersecurity");
@@ -20,7 +21,8 @@ export default function NewsList() {
   }
 
   useEffect(() => {
-    // getArticles();
+    getArticles(target);
+    setTarget("")
   }, []);
   return (
     <div className="flex flex-col items-center">
@@ -36,7 +38,7 @@ export default function NewsList() {
 
       {
         loader ? <Chill/> :
-    <div className="md:grid grid-cols-2">
+    <div className="md:grid lg:grid-cols-2 2xl:grid-cols-3 items-center">
       {articles.map((article,id) => {
         return (
           <div key={id}>
@@ -45,6 +47,7 @@ export default function NewsList() {
               description={article.description}
               url={article.url}
               urlToImage={article.urlToImage}
+              publishedAt={article.publishedAt}
             ></NewsItem>
           </div>
         );

@@ -23,5 +23,5 @@ body {
 }
 
 .scroll-up {
-  animation: scrollUp 7s linear infinite;
+  animation: scrollUp 7s linear infinite alternate;
 }

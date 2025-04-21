@@ -12,10 +12,9 @@ import Image from 'next/image'
 export default function Images() {
 
   return (
-    <div className="overflow-hidden relative flex flex-col gap-5 items-center justify-center bg-black p-5">
+    <div className="overflow-hidden relative flex flex-col gap-5 items-center justify-center p-5">
     <Image src={worldmap} alt='world map' className='max-h-[33rem]'/>
-    <div className='flex flex-row flex-wrap items-center justify-center py-20 h-[40rem] overflow-hidden rounded-3xl gap-5'>
-
+    <div className='flex flex-row flex-wrap items-center justify-center py-20 h-[40rem]  bg-transparent overflow-hidden rounded-3xl gap-5'>
       <Image className="scroll-up cursor-pointer w-[200px] lg:w-[300px] h-[200px] lg:h-[300px] rounded-lg" src={img1} alt="Image 1"/>
       <Image className="scroll-up cursor-pointer w-[200px] lg:w-[300px] h-[200px] lg:h-[300px] rounded-lg" src={img2} alt="Image 2"/>
       <Image className="scroll-up cursor-pointer w-[200px] lg:w-[300px] h-[200px] lg:h-[300px] rounded-lg" src={img3} alt="Image 3"/>
