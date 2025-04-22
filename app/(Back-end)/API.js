@@ -47,7 +47,6 @@ app.get('/shodanscan' , async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
   }
-
 })
 
 
