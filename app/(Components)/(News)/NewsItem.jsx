@@ -25,7 +25,7 @@ return (
       </div>
 
       <img
-        className="w-full 2xl:max-h-[600px] md:max-h-[400] max-h-[300px] rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+        className="w-full 2xl:max-h-[650px] md:max-h-[450] max-h-[300px] rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
         src={urlToImage}
         alt="news"
       />

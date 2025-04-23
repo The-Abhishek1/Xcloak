@@ -11,15 +11,20 @@ export default function NewsList() {
   const [loader, setLoader] = useState(true);
 
   const getArticles = async (target) => {
-  await fetch(`http://localhost:1210/news?q=${target}`)
+  await fetch('/api/news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ target }),
+        })
   .then(res => res.json())
   .then((data) =>{
-    SetArticles(data)
+    SetArticles(data.articles)
     setLoader(false)
   })
   .catch(err => console.error(err));
   }
-
   useEffect(() => {
     getArticles(target);
     setTarget("")
