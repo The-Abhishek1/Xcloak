@@ -45,10 +45,8 @@ function Scanner() {
         });
         const zapData = await zapRes.json();
         console.log('🧪 ZAP Scan Result:', zapData);
-        if(zapData.success){
-          setShow(true)
-        }
       }
+      setShow(true)
       } catch (error) {
         console.error('❌ Error fetching scan:', error);
       }
