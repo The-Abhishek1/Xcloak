@@ -20,8 +20,14 @@ export default function NewsList() {
         })
   .then(res => res.json())
   .then((data) =>{
+    console.log(data)
+    if(data.failure == true){
+    setLoader(true)  
+    }
+    else{
     SetArticles(data.articles)
     setLoader(false)
+    }
   })
   .catch(err => console.error(err));
   }

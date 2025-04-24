@@ -8,6 +8,7 @@ import Chill from "@/public/chill.png"
 function Scanner() {
   const searchParams = useSearchParams();
   const [shodanData, setShodanData] = useState(null);
+  const [virusTotalData, setVirusTotalData] = useState(null);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ function Scanner() {
     const fetchScan = async () => {
       try {
         //1. Shodan Scan
+        console.log('🛡️ Starting Shodan scan...');
         const res = await fetch('/api/shodanscan', {
           method: 'POST',
           headers: {
@@ -30,7 +32,7 @@ function Scanner() {
           body: JSON.stringify({ target }),
         });
         const data = await res.json();
-        console.log('✅ Response Data:', data);
+        console.log('✅ Shodan Data:', data);
         setShodanData(data);
 
         // 2. ZAP Scan (after Shodan is successful)
@@ -45,6 +47,21 @@ function Scanner() {
         });
         const zapData = await zapRes.json();
         console.log('🧪 ZAP Scan Result:', zapData);
+      }
+
+        // 2. Virus Total Scan (after Zodan is successful)
+        if (data.success) {
+        console.log('🛡️ Starting Virus Total scan...');
+        const virusRes = await fetch('/api/virustotal', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ target }),
+        });
+        const virusData = await virusRes.json();
+        console.log('🧪 Virus Total Result:', virusData);
+        setVirusTotalData(virusData)
       }
       setShow(true)
       } catch (error) {
@@ -89,6 +106,46 @@ function Scanner() {
             ))}
           </div>
         </div>
+        { 
+         virusTotalData.success ? 
+          <div className="bg-white shadow-xl rounded-xl p-6 mt-6 w-full max-w-2xl mx-auto animate-fade-in">
+          <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">🛡 VirusTotal Summary</h2>
+        
+          {/* Analysis Stats */}
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {Object.entries(virusTotalData.analysis_stats).map(([key, value]) => (
+              <div key={key} className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                <p className="font-semibold text-gray-600 capitalize">{key}</p>
+                <p className={`text-lg font-bold ${
+                  key === 'malicious' ? 'text-red-600' :
+                  key === 'suspicious' ? 'text-yellow-600' :
+                  key === 'harmless' ? 'text-green-600' : 'text-gray-600'
+                }`}>
+                  {value}
+                </p>
+              </div>
+            ))}
+          </div>
+        
+          {/* Reputation */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-700 mb-1">Reputation Score</p>
+            <div className="text-3xl font-bold text-purple-600">{virusTotalData.reputation}</div>
+          </div>
+        
+          {/* Categories */}
+          <div className="mt-6">
+            <p className="text-sm font-semibold text-gray-700 mb-2">🔖 Categories</p>
+            <ul className="list-disc pl-5 text-gray-600 text-sm space-y-1">
+              {Object.entries(virusTotalData.categories).map(([source, label], idx) => (
+                <li key={idx}>
+                  <span className="font-medium text-blue-700">{source}</span>: {label}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>   :null     
+        }
       </div>
     );
   }
