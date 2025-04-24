@@ -97,11 +97,11 @@ function Scanner() {
             {shodanData.results.map((item, idx) => (
               <div key={idx} className="bg-white rounded-lg shadow p-4">
                 <h2 className="text-xl font-semibold text-indigo-500 mb-2">{item.title}</h2>
-                <p className="text-gray-700 mb-1"><span className="font-medium">Description:</span> {item.description}</p>
-                <p className="text-gray-700 mb-1"><span className="font-medium">Query:</span> {item.query}</p>
-                <p className="text-gray-700 mb-1"><span className="font-medium">Tags:</span> {item.tags.join(', ')}</p>
-                <p className="text-gray-700 mb-1"><span className="font-medium">Votes:</span> {item.votes}</p>
-                <p className="text-gray-600 text-sm mt-2">🕒 {item.timestamp}</p>
+                <p className="text-gray-700 mb-1 inline"><span className="font-medium">Description:</span> {item.description}</p>
+                <p className="text-gray-700 mb-1 inline"><span className="font-medium">Query:</span> {item.query}</p>
+                <p className="text-gray-700 mb-1 inline"><span className="font-medium">Tags:</span> {item.tags.join(', ')}</p>
+                <p className="text-gray-700 mb-1 inline"><span className="font-medium">Votes:</span> {item.votes}</p>
+                <p className="text-gray-600 text-sm mt-2 inline">🕒 {item.timestamp}</p>
               </div>
             ))}
           </div>
