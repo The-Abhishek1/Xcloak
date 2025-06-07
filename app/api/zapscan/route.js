@@ -1,5 +1,6 @@
 import ZAPClient from "zaproxy"
-
+import path from "path"
+import fs from 'fs'
 //ZAP PROXY
 export async function POST(request) {
   const body = await request.json();
@@ -9,12 +10,12 @@ export async function POST(request) {
   console.log('🎯 Extracted Target:', target);
 
   //ZAP Scan
-  const API = 'o6p1df1ihiddrmdq1r2dv6j7g5'
+  const API = 'jhlc5el9omeee25t4no3vs0j1j'
   const zapOptions = {
     apiKey: API, // Leave empty if disabled
     proxy: {
       host:'localhost',
-      port:1004
+      port:1210
     }
   };
   const zaproxy = new ZAPClient(zapOptions);
@@ -70,7 +71,8 @@ export async function POST(request) {
       reportFileName: 'report.html',
       displayReport: true,
     });
-    console.log('HTML report saved at: ' + report.generate);
+    
+    console.log(`✅ Report saved at: ${report.generate}`);
 
     return Response.json({
       success: true,

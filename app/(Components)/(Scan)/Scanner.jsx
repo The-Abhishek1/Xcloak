@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Chill from "@/public/chill.png"
 
@@ -10,6 +10,9 @@ function Scanner() {
   const [shodanData, setShodanData] = useState(null);
   const [virusTotalData, setVirusTotalData] = useState(null);
   const [show, setShow] = useState(false);
+  const [report,setReport] = useState("")
+  const [zapData,setZapData]  = useState(null)
+  const router = useRouter()
 
   useEffect(() => {
     const target = searchParams.get('target');
@@ -22,7 +25,7 @@ function Scanner() {
 
     const fetchScan = async () => {
       try {
-        //1. Shodan Scan
+        // 1. Shodan Scan
         console.log('🛡️ Starting Shodan scan...');
         const res = await fetch('/api/shodanscan', {
           method: 'POST',
@@ -35,8 +38,23 @@ function Scanner() {
         console.log('✅ Shodan Data:', data);
         setShodanData(data);
 
+         // 2. Virus Total Scan (after Zodan is successful)
+         if (data.success) {
+          console.log('🛡️ Starting Virus Total scan...');
+          const virusRes = await fetch('/api/virustotal', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ target }),
+          });
+          const virusData = await virusRes.json();
+          console.log('🧪 Virus Total Result:', virusData);
+          setVirusTotalData(virusData)
+        }
+
         // 2. ZAP Scan (after Shodan is successful)
-        if (data.success) {
+        if ( 1 ==1 ) {
         console.log('🛡️ Starting ZAP scan...');
         const zapRes = await fetch('/api/zapscan', {
           method: 'POST',
@@ -46,22 +64,9 @@ function Scanner() {
           body: JSON.stringify({ target }),
         });
         const zapData = await zapRes.json();
+        setReport(zapData.reportPath)
+        setZapData(zapData)
         console.log('🧪 ZAP Scan Result:', zapData);
-      }
-
-        // 2. Virus Total Scan (after Zodan is successful)
-        if (data.success) {
-        console.log('🛡️ Starting Virus Total scan...');
-        const virusRes = await fetch('/api/virustotal', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ target }),
-        });
-        const virusData = await virusRes.json();
-        console.log('🧪 Virus Total Result:', virusData);
-        setVirusTotalData(virusData)
       }
       setShow(true)
       } catch (error) {
@@ -71,8 +76,9 @@ function Scanner() {
 
     fetchScan();
   }, [searchParams]);
+  //&& shodanData && shodanData.results
 
-  if (show && shodanData && shodanData.results) {
+  if (show ) {
     return (
       <div className="min-h-screen p-6 text-[0.8rem]">
         <div className="max-w-5xl mx-auto">
@@ -146,6 +152,15 @@ function Scanner() {
           </div>
         </div>   :null     
         }
+        { 
+         zapData.success ? 
+          <div className="bg-white shadow-xl flex flex-col items-center rounded-xl p-6 mt-6 w-full max-w-2xl mx-auto animate-fade-in">
+          <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">🛡 Zap Scan Summary</h2>
+        <button onClick={() =>{
+          router.push(`/zapreport?path=${report}`)
+        }} className="bg-green-600 cursor-pointer hover:bg-green-700 text-white w-60 sm:w-80 py-2 rounded-xl text-sm transition-all shadow-md">Read the Report</button>
+        </div>:null
+}
       </div>
     );
   }

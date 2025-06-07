@@ -26,18 +26,23 @@ function Input() {
     />
     {error && <p className="text-sm text-red-600">Please enter a valid URL.</p>}
     <button
-      onClick={() => {
-        if (!/^https?:\/\/[^\s/$.?#].[^\s]*\.[a-z]{2,}$/i.test(target)) {
-          setError(true);
-          setTarget("");
-        } else {
-          router.push(`/scan?target=${target}`)
-        }        
-      }}
-      className="bg-green-600 cursor-pointer hover:bg-green-700 text-white w-60 sm:w-80 py-2 rounded-xl text-sm transition-all shadow-md"
-    >
-      Start Testing URL
-    </button>
+  onClick={() => {
+    // Improved URL validation regex
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?$/i;
+    
+    if (!urlPattern.test(target)) {
+      setError(true);
+      setTarget("");
+    } else {
+      // Ensure URL starts with http:// or https://
+      const formattedTarget = target.startsWith('http') ? target : `https://${target}`;
+      router.push(`/scan?target=${encodeURIComponent(formattedTarget)}`)
+    }        
+  }}
+  className="bg-green-600 cursor-pointer hover:bg-green-700 text-white w-60 sm:w-80 py-2 rounded-xl text-sm transition-all shadow-md"
+>
+  Start Testing URL
+</button>
   </div>
   )
 }
